@@ -46,6 +46,9 @@ import TechnicalWeightageForm from "./pages/Organizer/SetTechnicalConfidence.js"
 import ConferencePapersDecisions from "./pages/Organizer/PapersDecision.js";
 import ConferenceProceedingsForm from "./pages/Organizer/ConferenceProceedingsForm.js";
 import ProceedingsPreview from "./pages/Organizer/ProceedingsPreview.js";
+import axios from "axios";
+
+axios.defaults.baseURL = process.env.REACT_APP_API;
 
 function App() {
   return (
