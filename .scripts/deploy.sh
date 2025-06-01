@@ -21,8 +21,8 @@ echo "Building application"
 npm run build
 
 # Copying dist to /var/www/confizio
-echo "Copying dist to /var/www/confizio"
-sudo cp -r dist/* /var/www/confizio
+echo "Copying build to /var/www/confizio"
+sudo cp -r build/* /var/www/confizio
 
 
 
