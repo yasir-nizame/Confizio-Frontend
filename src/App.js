@@ -48,6 +48,7 @@ import ConferenceProceedingsForm from "./pages/Organizer/ConferenceProceedingsFo
 import ProceedingsPreview from "./pages/Organizer/ProceedingsPreview.js";
 
 function App() {
+  console.log("Hello world");
   return (
     <>
       <Toaster
