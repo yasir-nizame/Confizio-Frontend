@@ -51,6 +51,7 @@ import axios from "axios";
 axios.defaults.baseURL = process.env.REACT_APP_API;
 
 function App() {
+  console.log("Hello world");
   return (
     <>
       <Toaster
