@@ -254,7 +254,7 @@ function AuthorForm({ conferenceName }) {
     return (
       <Layout title={"Confizio - Submit paper"}>
         <div className="flex justify-center items-center min-h-screen">
-          <div className="loader">Loading...</div>
+          <div className="loader">Loading....</div>
         </div>
       </Layout>
     );
