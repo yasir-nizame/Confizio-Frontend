@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Layout from "../../components/Layout";
+import axios from "axios";
 import toast from "react-hot-toast";
 
 const InviteReviewers = () => {
@@ -28,18 +29,20 @@ const InviteReviewers = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/email/invite-reviewers", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
+      const response = await axios.post(
+        "/api/email/invite-reviewers",
+        {
           reviewerEmails: emailList,
           conferenceId,
           conferenceName,
           additionalMessage,
-        }),
-      });
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {

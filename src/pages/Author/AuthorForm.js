@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useRef } from "react";
 import Layout from "../../components/Layout";
 import toast from "react-hot-toast";
+import axios from "axios";
 import { useAuth } from "../../context/Auth";
 
 function AuthorForm({ conferenceName }) {
@@ -45,9 +46,10 @@ function AuthorForm({ conferenceName }) {
   useEffect(() => {
     const fetchConference = async () => {
       try {
-        const response = await fetch(`/api/conference/get-conference/${id}`);
-        const data = await response.json();
-        setFetchedConferenceName(data.conferenceName);
+        const response = await axios.get(
+          `/api/conference/get-conference/${id}`
+        );
+        setFetchedConferenceName(response.data.conferenceName);
       } catch (error) {
         console.error("Error fetching conference:", error);
       }
@@ -117,20 +119,16 @@ function AuthorForm({ conferenceName }) {
       const formData = new FormData();
       formData.append("paper", file);
 
-      const response = await fetch("/api/author/check-compliance", {
-        method: "POST",
-        body: formData,
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setComplianceReport(data.complianceReport);
-        toast.success("Compliance check completed.");
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.message || "Error performing compliance check.");
-      }
+      const response = await axios.post(
+        "/api/author/check-compliance",
+        formData
+      );
+      setComplianceReport(response.data.complianceReport);
+      toast.success("Compliance check completed.");
     } catch (error) {
-      toast.error("An error occurred during compliance check.");
+      toast.error(
+        error.response?.data?.message || "Error performing compliance check."
+      );
     } finally {
       setComplianceLoading(false);
     }
@@ -185,6 +183,7 @@ function AuthorForm({ conferenceName }) {
     await submitForm();
   };
 
+
   const submitForm = async () => {
     setSubmissionStatus("Submitting...");
     try {
@@ -199,45 +198,37 @@ function AuthorForm({ conferenceName }) {
       formData.append("conferenceName", fetchedConferenceName);
       formData.append("userId", auth?.user?._id);
 
-      const response = await fetch("/api/author/submit-paper", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await axios.post("/api/author/submit-paper", formData);
 
-      if (response.ok) {
-        const data = await response.json();
-        setSubmissionStatus("Submission successful!");
-        toast.success(data.message);
+      setSubmissionStatus("Submission successful!");
+      toast.success(response.data.message);
 
-        // Reset form fields
-        setTitle("");
-        setAbstract("");
-        setKeywords("");
-        setPaper(null);
-        setSelectedFile(null); // Reset selectedFile to hide file name and cross icon
-        setAuthors([
-          {
-            firstName: "",
-            lastName: "",
-            email: auth?.user?.email || "",
-            country: "",
-            affiliation: "",
-            webPage: "",
-            corresponding: true,
-          },
-        ]);
-        setComplianceReport(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-      } else {
-        const errorData = await response.json();
-        setSubmissionStatus(`Submission failed: ${errorData.message}`);
-        toast.error(errorData.message || "Error while submitting your paper");
+      // Reset form fields
+      setTitle("");
+      setAbstract("");
+      setKeywords("");
+      setPaper(null);
+      setSelectedFile(null); // Reset selectedFile to hide file name and cross icon
+      setAuthors([
+        {
+          firstName: "",
+          lastName: "",
+          email: auth?.user?.email || "",
+          country: "",
+          affiliation: "",
+          webPage: "",
+          corresponding: true,
+        },
+      ]);
+      setComplianceReport(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
     } catch (error) {
       setSubmissionStatus("Submission failed due to an error.");
-      toast.error("An error occurred. Please try again.");
+      toast.error(
+        error.response?.data?.message || "Error while submitting your paper"
+      );
     }
   };
 
