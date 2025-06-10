@@ -3,6 +3,8 @@ import Layout from "../../components/Layout";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Sidebar from "../../components/AdminSidebar";
+import Spinner from "../../components/Spinner";
+
 
 const RejectedConferences = () => {
   const [conferences, setConferences] = useState([]);
@@ -47,7 +49,7 @@ const RejectedConferences = () => {
 
           {/* Loading message */}
           {loading ? (
-            <p>Loading...</p>
+            <Spinner />
           ) : conferences.length === 0 ? (
             <p>No rejected conferences found.</p>
           ) : (

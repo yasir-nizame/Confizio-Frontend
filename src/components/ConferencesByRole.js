@@ -3,6 +3,7 @@ import { useAuth } from "../context/Auth";
 import axios from "axios";
 import Layout from "../components/Layout";
 import { Link } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 const RoleConferencesPage = ({ role }) => {
   const [auth] = useAuth(); // Get auth context
@@ -31,7 +32,10 @@ const RoleConferencesPage = ({ role }) => {
     }
   }, [auth, role]);
 
-  if (loading) return <div>Loading conferences...</div>;
+  // if (loading) return <div>Loading conferences...</div>;
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <Layout title={`Confera Flow - ${role} Conferences`}>
@@ -61,7 +65,7 @@ const RoleConferencesPage = ({ role }) => {
                     className="hover:bg-secondary hover:bg-opacity-20 transition-colors duration-300"
                   >
                     <td className="py-3 px-6 border-b">
-                      {conf.conferenceName} ({conf.acronym}) 
+                      {conf.conferenceName} ({conf.acronym})
                     </td>
                     <td className="py-3 px-6 border-b">{role}</td>
                     <td className="py-3 px-6 border-b">

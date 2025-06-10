@@ -27,7 +27,6 @@ const AssignPapersPage = () => {
 
     setConferenceName(cName);
     setConferenceId(cId);
-
   }, [location.search]);
 
   const handleAssignPapers = async () => {
@@ -116,10 +115,10 @@ const AssignPapersPage = () => {
         }
       );
       setAssignmentsByPaper(response.data.assignmentsByPaper || {});
-      toast.success("Fetched assignments successfully.");
+      // toast.success("Fetched assignments successfully.");
     } catch (error) {
       console.error("Error fetching assignments:", error);
-      toast.error("Failed to fetch assignments.");
+      // toast.error("Failed to fetch assignments.");
     }
   };
 
@@ -135,7 +134,7 @@ const AssignPapersPage = () => {
       const response = await axios.get(
         `/api/reviewer/${conferenceId}/reviewers`
       );
-  
+
       setAvailableReviewers(response.data.data || []);
       // Fetch assigned reviewers count for this paper
       const assignmentResponse = await axios.get(

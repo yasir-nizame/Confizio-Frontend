@@ -44,8 +44,8 @@ import AllPapersOfAuthor from "./pages/Author/ShowAllPapersOfUser.js";
 import UpdatePaper from "./pages/Author/UpdatePaper.js";
 import TechnicalWeightageForm from "./pages/Organizer/SetTechnicalConfidence.js";
 import ConferencePapersDecisions from "./pages/Organizer/PapersDecision.js";
-import ConferenceProceedingsForm from "./pages/Organizer/ConferenceProceedingsForm.js";
 import ProceedingsPreview from "./pages/Organizer/ProceedingsPreview.js";
+import ConferenceProceedingsForm from "./pages/Organizer/ConferenceProceedingsForm.js";
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_API;
@@ -112,11 +112,6 @@ function App() {
               path="technical-weightage"
               element={<TechnicalWeightageForm />}
             />
-            <Route
-              path="generate-proceedings"
-              element={<ConferenceProceedingsForm />}
-            />
-            <Route path="view-proceedings" element={<ProceedingsPreview />} />
           </Route>
 
           <Route element={<RolePrivateRoute role="reviewer" />}>
@@ -166,6 +161,11 @@ function App() {
         <Route path="/response" element={<InvitationResponse />} />
         {/* <Route path="register-reviewer" element={<ReviewerRegistrationForm />} />
         <Route path="login-reviewer" element={<ReviewerLoginForm />} /> */}
+        <Route
+          path="/generate-proceedings"
+          element={<ConferenceProceedingsForm />}
+        />
+        <Route path="view-proceedings" element={<ProceedingsPreview />} />
       </Routes>
     </>
   );

@@ -44,7 +44,7 @@ const InviteReviewers = () => {
         }
       );
 
-      const data = await response.json();
+      const data = response.data;
       if (response.ok) {
         toast.success(data.message);
         setEmails("");

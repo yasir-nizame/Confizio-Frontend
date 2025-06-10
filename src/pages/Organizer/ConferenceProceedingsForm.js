@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ConferenceProceedingsForm = () => {
   const navigate = useNavigate();
@@ -49,11 +50,11 @@ const ConferenceProceedingsForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!conferenceId) {
-      alert("Conference ID is missing");
+      console.log("Conference ID is missing");
       return;
     }
     if (!formData.proceedingsIntro) {
-      alert("Please upload a proceedings intro PDF");
+      toast.error("Please upload a proceedings intro PDF");
       return;
     }
 
@@ -71,7 +72,7 @@ const ConferenceProceedingsForm = () => {
         }
       );
 
-      alert("Proceedings PDF uploaded and finalized!");
+      toast.success("Proceedings PDF uploaded and finalized!");
       navigate(
         `/view-proceedings?conferenceId=${encodeURIComponent(
           conferenceId
@@ -157,7 +158,7 @@ const ConferenceProceedingsForm = () => {
           </div>
           <button
             type="submit"
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-secondaryAlt-dark hover:bg-secondary"
           >
             Upload and Finalize Proceedings
           </button>

@@ -14,6 +14,7 @@ function ConferenceCreationForm() {
     conferenceName: "",
     acronym: "",
     webPage: "",
+    mode: "",
     venue: "",
     city: "",
     country: "",
@@ -41,6 +42,31 @@ function ConferenceCreationForm() {
           : value,
     }));
   };
+  const validateRequiredFields = () => {
+    const { conferenceName, acronym, startDate, endDate, mode } = formData;
+
+    if (!conferenceName.trim()) {
+      toast.error("Conference Name is required.");
+      return false;
+    }
+
+    if (!acronym.trim()) {
+      toast.error("Acronym is required.");
+      return false;
+    }
+
+    if (!startDate || !endDate) {
+      toast.error("Start and End dates are required.");
+      return false;
+    }
+
+    if (!mode) {
+      toast.error("Please select a Review Mode.");
+      return false;
+    }
+
+    return true;
+  };
 
   // Handle topics array
   const handleTopicChange = (index, value) => {
@@ -61,9 +87,22 @@ function ConferenceCreationForm() {
     const end = new Date(endDate);
     const abstract = new Date(abstractDeadline);
     const submission = new Date(submissionDeadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // normalize time to midnight
 
     if (!startDate || !endDate || !abstractDeadline || !submissionDeadline) {
       toast.error("All date fields must be filled.");
+      return false;
+    }
+
+    // Check if any date is in the past
+    if (
+      start < today ||
+      end < today ||
+      abstract < today ||
+      submission < today
+    ) {
+      toast.error("Dates must not be in the past.");
       return false;
     }
 
@@ -90,6 +129,10 @@ function ConferenceCreationForm() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Check if all required fields are filled
+    if (!validateRequiredFields()) {
+      return;
+    }
     // Validate dates before submission
     if (!validateDates()) {
       return;
@@ -98,7 +141,6 @@ function ConferenceCreationForm() {
       const response = await axios.post("/api/conference/create-conference", {
         ...formData,
         userId: auth?.user?._id,
-        
       });
       const { submissionLink } = response.data;
       toast.success(`Conference created Successfully`);
@@ -310,6 +352,44 @@ function ConferenceCreationForm() {
                 className="w-full p-2 border rounded-md border-gray-300"
               />
             </div>
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">
+                Review Mode
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="mode"
+                    value="single-blind"
+                    checked={formData.mode === "single-blind"}
+                    onChange={handleChange}
+                  />
+                  Single Blind
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="mode"
+                    value="double-blind"
+                    checked={formData.mode === "double-blind"}
+                    onChange={handleChange}
+                  />
+                  Double Blind
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="mode"
+                    value="no-blind"
+                    checked={formData.mode === "no-blind"}
+                    onChange={handleChange}
+                  />
+                  No Blind
+                </label>
+              </div>
+            </div>
+
             {/* Research Areas */}
             <div>
               <label

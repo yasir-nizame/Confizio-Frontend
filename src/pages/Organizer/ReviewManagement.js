@@ -20,7 +20,7 @@ const ReviewManagement = () => {
         const response = await axios.get(
           `/api/organizer/review-management/${conferenceId}`
         );
-      
+
         setTableData(response.data);
       } catch (error) {
         console.error("Error fetching review management data:", error);
@@ -81,10 +81,10 @@ const ReviewManagement = () => {
         <h1 className="text-2xl font-bold mb-4">Review Management</h1>
         <h1 className="text-xl font-bold mb-4">Conference: {conferenceName}</h1>
         <div className="overflow-x-auto">
-          <table className="table-auto w-full border-collapse border border-gray-300">
+          <table className="table-auto w-full border-collapse border  border-gray-300">
             <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-300 p-2">Paper ID</th>
+              <tr className="bg-secondary/90 text-white ">
+                <th className="border border-gray-300 p-2">S.No</th>
                 <th className="border border-gray-300 p-2 ">Title</th>
                 <th className="border border-gray-300 p-2">Authors</th>
                 <th className="border border-gray-300 p-2">Status</th>
@@ -94,12 +94,12 @@ const ReviewManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {tableData.map((paper) => (
+              {tableData.map((paper, index) => (
                 <tr key={paper.paperId} className="bg-white">
-                  <td className="border border-gray-300 p-2">
-                    {paper.paperId}
+                  <td className="border border-gray-300 p-2 text-center">
+                    {index + 1}
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className="border border-gray-300 p-2 text-center">
                     {paper.title}
                     {paper.status === "resubmitted" && (
                       <span className="ml-2 text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">
@@ -107,7 +107,7 @@ const ReviewManagement = () => {
                       </span>
                     )}
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className="border border-gray-300 p-2 text-center">
                     {paper.authors.map((author, index) => (
                       <div key={index}>
                         <span className="font-semibold">{author.name}</span>
@@ -119,13 +119,13 @@ const ReviewManagement = () => {
                     ))}
                   </td>
 
-                  <td className="border border-gray-300 p-2">
+                  <td className="border border-gray-300 p-2 text-center">
                     {paper.overallstatus}
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className="border border-gray-300 p-2 text-center">
                     {paper.decision || "pending"}
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className="border border-gray-300 p-4">
                     {paper.reviewers.map((reviewer, index) => (
                       <div key={index} className="flex flex-col">
                         <span>{reviewer.name}</span>
@@ -231,7 +231,7 @@ const ReviewManagement = () => {
                     {(paper.decision === null ||
                       paper.decision === undefined ||
                       paper.decision === "pending") && (
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-2 p-4">
                         {/* Scores and Recommendation */}
                         <p className="text-lg font-semibold w-full">
                           Average Technical Score: {paper.avgTechConfidence}
