@@ -111,7 +111,6 @@ const UpdateConference = () => {
         `/api/conference/delete-conference/${selectedConferenceId}`
       );
       toast.success("Conference deleted successfully.");
-      navigate("/admin-dashboard");
     } catch (error) {
       toast.error("Something went wrong.");
     }
