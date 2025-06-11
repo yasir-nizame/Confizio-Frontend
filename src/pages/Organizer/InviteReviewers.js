@@ -25,6 +25,7 @@ const InviteReviewers = () => {
       toast.error("Please provide at least one email.");
       return;
     }
+
     const emailList = emails.split(",").map((email) => email.trim());
     setLoading(true);
 
@@ -44,17 +45,14 @@ const InviteReviewers = () => {
         }
       );
 
-      const data = response.data;
-      if (response.ok) {
-        toast.success(data.message);
-        setEmails("");
-        setAdditionalMessage("");
-      } else {
-        toast.error(data.message);
-      }
+      toast.success(response.data.message || "Invitations sent successfully.");
+      setEmails("");
+      setAdditionalMessage("");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to send invitations.");
+      toast.error(
+        error.response?.data?.message || "Failed to send invitations."
+      );
     } finally {
       setLoading(false);
     }
