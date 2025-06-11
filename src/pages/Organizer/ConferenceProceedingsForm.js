@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
+import Layout from "../../components/Layout";
 
 const ConferenceProceedingsForm = () => {
   const navigate = useNavigate();
@@ -88,83 +89,87 @@ const ConferenceProceedingsForm = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">
-        {conferenceName || "Conference"} Proceedings
-      </h1>
+    <Layout title="Confizio - Proceedngs">
+      <div className="max-w-6xl mx-auto p-6">
+        <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">
+          {conferenceName || "Conference"} Proceedings
+        </h1>
 
-      {/* Accepted Papers Cards */}
-      {fetchError ? (
-        <p className="text-red-600 text-center mb-8">{fetchError}</p>
-      ) : papers.length === 0 ? (
-        <p className="text-gray-600 text-center mb-8">
-          No accepted papers found.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {papers.map((paper) => (
-            <div
-              key={paper._id}
-              className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100"
-            >
-              <h2 className="text-xl font-semibold text-gray-800 mb-3">
-                {paper.title}
-              </h2>
-              <div>
-                <p className="font-medium text-gray-700 mb-2">Authors:</p>
-                {paper.authors.map((author) => (
-                  <div key={author._id} className="text-gray-600 mb-2">
-                    <p>
-                      <span className="font-medium">
-                        {author.firstName} {author.lastName}
-                      </span>
-                    </p>
-                    <p>{author.affiliation}</p>
-                    <p>{author.country}</p>
-                    <p className="text-blue-600">{author.email}</p>
-                  </div>
-                ))}
+        {/* Accepted Papers Cards */}
+        {fetchError ? (
+          <p className="text-red-600 text-center mb-8">{fetchError}</p>
+        ) : papers.length === 0 ? (
+          <p className="text-gray-600 text-center mb-8">
+            No accepted papers found.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            {papers.map((paper) => (
+              <div
+                key={paper._id}
+                className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-100"
+              >
+                <h2 className="text-xl font-semibold text-gray-800 mb-3">
+                  {paper.title}
+                </h2>
+                <div>
+                  <p className="font-medium text-gray-700 mb-2">Authors:</p>
+                  {paper.authors.map((author) => (
+                    <div key={author._id} className="text-gray-600 mb-2">
+                      <p>
+                        <span className="font-medium">
+                          {author.firstName} {author.lastName}
+                        </span>
+                      </p>
+                      <p>{author.affiliation}</p>
+                      <p>{author.country}</p>
+                      <p className="text-blue-600">{author.email}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-gray-600 mb-4 line-clamp-3">
+                  <span className="font-medium">Abstract:</span>{" "}
+                  {paper.abstract}
+                </p>
               </div>
-              <p className="text-gray-600 mb-4 line-clamp-3">
-                <span className="font-medium">Abstract:</span> {paper.abstract}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Upload Form */}
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">
-          Upload Proceedings PDF
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Proceedings Intro (PDF containing Title, Preface, Committees,
-              Sponsors, and Table of Contents)
-            </label>
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => handleFileChange(e, "proceedingsIntro")}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
-            {errors.proceedingsIntro && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors.proceedingsIntro}
-              </p>
-            )}
+            ))}
           </div>
-          <button
-            type="submit"
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-secondaryAlt-dark hover:bg-secondary"
-          >
-            Upload and Finalize Proceedings
-          </button>
-        </form>
+        )}
+
+        {/* Upload Form */}
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            Upload Proceedings PDF
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Proceedings Intro (PDF containing Title, Preface, Committees,
+                Sponsors, and Table of Contents)
+              </label>
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={(e) => handleFileChange(e, "proceedingsIntro")}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              {errors.proceedingsIntro && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.proceedingsIntro}
+                </p>
+              )}
+            </div>
+            <button
+              disabled={papers.length === 0}
+              type="submit"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-secondaryAlt-dark hover:bg-secondary"
+            >
+              Upload and Finalize Proceedings
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
