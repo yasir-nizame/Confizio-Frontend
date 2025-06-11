@@ -160,9 +160,13 @@ const ConferenceProceedingsForm = () => {
               )}
             </div>
             <button
-              disabled={papers.length === 0}
               type="submit"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-secondaryAlt-dark hover:bg-secondary"
+              disabled={papers.length === 0}
+              className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white ${
+                papers.length === 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-secondaryAlt-dark hover:bg-secondary"
+              }`}
             >
               Upload and Finalize Proceedings
             </button>
