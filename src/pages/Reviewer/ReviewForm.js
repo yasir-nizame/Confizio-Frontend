@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
@@ -111,7 +110,6 @@ const ReviewForm = () => {
         onSubmit={handleSubmit}
       >
         <h2 className="text-2xl font-bold mb-4 text-center">Review Form</h2>
-        <h4 className="text-lg font-bold mb-1 text-left">Paper#: {paper}</h4>
         <h4 className="text-lg font-bold mb-4 text-left">Title: {title}</h4>
 
         <div className="space-y-2">

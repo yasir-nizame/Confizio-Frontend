@@ -77,14 +77,14 @@ const ReviewDetails = () => {
               <div className="flex gap-10 items-center">
                 {paper.complianceReport && (
                   <DonutChart
-                    value={paper.complianceReport?.percentage || 0}
+                    value={(paper.complianceReport?.percentage).toFixed(2) || 0}
                     label="IEEE Compliance"
                     color="#10b981" // green
                   />
                 )}
                 {paper.plagiarismReport && (
                   <DonutChart
-                    value={paper.plagiarismReport?.score || 0}
+                    value={(paper.plagiarismReport?.score).toFixed(2) || 0}
                     label="Plagiarism Score"
                     color="#ef4444" // red
                   />
