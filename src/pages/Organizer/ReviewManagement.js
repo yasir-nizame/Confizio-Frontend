@@ -245,9 +245,7 @@ const ReviewManagement = () => {
                         <p className="text-sm font-semibold w-full">
                           Plagiarism Score:{" "}
                           {paper.plagiarismReport?.score != null
-                            ? `${(paper.plagiarismReport.score * 100).toFixed(
-                                2
-                              )}%`
+                            ? `${paper.plagiarismReport.score.toFixed(2)}%`
                             : "Not Available"}
                         </p>
                         <p className="text-sm font-semibold w-full">
