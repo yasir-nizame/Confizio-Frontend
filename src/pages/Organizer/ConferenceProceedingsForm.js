@@ -80,7 +80,7 @@ const ConferenceProceedingsForm = () => {
       );
     } catch (error) {
       console.error("Error uploading PDF:", error);
-      alert(
+      toast.error(
         "Failed to upload PDF: " +
           (error.response?.data?.error || "Unknown error")
       );
