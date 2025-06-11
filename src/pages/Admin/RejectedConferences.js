@@ -49,7 +49,7 @@ const RejectedConferences = () => {
 
           {/* Loading message */}
           {loading ? (
-            <Spinner />
+            <p>Loading...</p>
           ) : conferences.length === 0 ? (
             <p>No rejected conferences found.</p>
           ) : (

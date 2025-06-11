@@ -56,8 +56,7 @@ const ConferenceRequests = () => {
           </h1>
 
           {loading ? (
-            // <p>Loading...</p>
-            <Spinner />
+            <p>Loading...</p>
           ) : conferences.length === 0 ? (
             <p>No pending conference requests found.</p>
           ) : (
