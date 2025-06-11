@@ -12,6 +12,8 @@ function AuthorForm({ conferenceName }) {
   const [keywords, setKeywords] = useState("");
   const [paper, setPaper] = useState(null);
   const [submissionStatus, setSubmissionStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSubmittingMessage, setShowSubmittingMessage] = useState(false);
   const { acronym, id } = useParams();
   const [fetchedConferenceName, setFetchedConferenceName] = useState("");
   const [loading, setLoading] = useState(true);
@@ -183,9 +185,11 @@ function AuthorForm({ conferenceName }) {
     await submitForm();
   };
 
-
   const submitForm = async () => {
+    setIsSubmitting(true);
     setSubmissionStatus("Submitting...");
+    setShowSubmittingMessage(true);
+
     try {
       const formData = new FormData();
       formData.append("title", title);
@@ -497,10 +501,18 @@ function AuthorForm({ conferenceName }) {
 
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-accent text-white rounded-md hover:bg-accentAlt-dark"
+              className={`w-full py-2 px-4 bg-accent text-white rounded-md hover:bg-accentAlt-dark ${
+                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isSubmitting}
             >
-              Submit Paper
+              {isSubmitting ? "Submitting..." : "Submit Paper"}
             </button>
+            {showSubmittingMessage && (
+              <p className="text-primary text-center mt-2">
+                Your paper is being submitted. Please wait...
+              </p>
+            )}
           </form>
 
           {showModal && (

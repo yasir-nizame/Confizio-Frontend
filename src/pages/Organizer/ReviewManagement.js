@@ -233,22 +233,28 @@ const ReviewManagement = () => {
                       paper.decision === "pending") && (
                       <div className="flex flex-col gap-2 p-4">
                         {/* Scores and Recommendation */}
-                        <p className="text-lg font-semibold w-full">
+                        <p className="text-sm font-semibold w-full">
                           Average Technical Score: {paper.avgTechConfidence}
                         </p>
-                        <p className="text-lg font-semibold w-full">
+                        <p className="text-sm font-semibold w-full">
                           IEEE Compliance Score:{" "}
                           {paper.complianceScore != null
                             ? `${paper.complianceScore}%`
                             : "Not Available"}
                         </p>
-                        <p className="text-lg font-semibold w-full">
+                        <p className="text-sm font-semibold w-full">
                           Plagiarism Score:{" "}
                           {paper.plagiarismReport?.score != null
                             ? `${paper.plagiarismReport.score}%`
                             : "Not Available"}
                         </p>
-                        <p className="text-md font-semibold w-full">
+                        <p className="text-sm font-semibold w-full">
+                          AI Generated:{" "}
+                          {paper.plagiarismReport?.isAIGenerated != null
+                            ? `${paper.plagiarismReport.isAIGenerated}`
+                            : "Not Available"}
+                        </p>
+                        <p className="text-sm font-semibold w-full">
                           Recommendation:{" "}
                           <span
                             className={`${
