@@ -88,6 +88,24 @@ const Header = () => {
               CFP
               <span className="absolute bottom-0 left-0 w-0 h-0.5  bg-secondary  transition-all duration-300 group-hover:w-full"></span>
             </a>
+            <a
+              href="/create-conference"
+              className="relative text-white group hover:text-light"
+              onClick={(e) => {
+                if (!auth?.user) {
+                  e.preventDefault();
+                  toast.error("Please login to continue...", {
+                    duration: 2000,
+                  });
+                  setTimeout(() => {
+                    window.location.href = "/login";
+                  }, 1000);
+                }
+              }}
+            >
+              Create Conference
+              <span className="absolute bottom-0 left-0 w-0 h-0.5  bg-secondary  transition-all duration-300 group-hover:w-full"></span>
+            </a>
           </div>
         </div>
         {/* User Dropdown */}

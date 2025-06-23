@@ -2,15 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import Layout from "../../components/Layout";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const TechnicalWeightageForm = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [conferenceName, setConferenceName] = useState("");
-  const [conferenceId, setConferenceId] = useState("");
-
-  const location = useLocation();
+  const { id: conferenceId } = useParams();
 
   const [isEditing, setIsEditing] = useState(false);
   const [initialWeightage, setInitialWeightage] = useState({});
@@ -23,16 +21,6 @@ const TechnicalWeightageForm = () => {
   });
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const name = queryParams.get("conferenceName") || "";
-    const id = queryParams.get("conferenceId") || "";
-
-    setConferenceName(name);
-    setConferenceId(id);
-
-  }, [location.search]);
-
-  useEffect(() => {
     if (!conferenceId) {
       setLoading(false);
       return;
@@ -41,7 +29,8 @@ const TechnicalWeightageForm = () => {
     axios
       .get(`/api/organizer/get-technical-weightage/${conferenceId}`)
       .then((res) => {
-        // Remove unwanted fields
+        console.log("API response:", res.data);
+
         const { _id, conferenceId, __v, ...filteredData } = res.data;
         setWeightage(filteredData);
         setInitialWeightage(filteredData);
@@ -93,7 +82,7 @@ const TechnicalWeightageForm = () => {
     setError(null);
   };
   return (
-    <Layout>
+    <>
       {/* Header Section */}
       <header className="bg-gradient-to-r from-primary to-secondary py-6 shadow-md mt-5 w-1/2 justify-center mx-auto rounded-lg">
         <h2 className="text-2xl font-bold text-white text-center tracking-tight">
@@ -179,7 +168,7 @@ const TechnicalWeightageForm = () => {
           </div>
         </div>
       </main>
-    </Layout>
+    </>
   );
 };
 

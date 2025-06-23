@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Layout from "../../components/Layout";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -9,17 +9,17 @@ const InviteReviewers = () => {
   const [additionalMessage, setAdditionalMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [conferenceName, setConferenceName] = useState("");
-  const [conferenceId, setConferenceId] = useState("");
 
-  const location = useLocation();
-
-  // Parse query parameters
+  const { id: conferenceId } = useParams();
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    setConferenceName(queryParams.get("conferenceName") || "");
-    setConferenceId(queryParams.get("conferenceId") || "");
-  }, [location.search]);
-
+    const fetchConference = async () => {
+      const res = await axios.get(
+        `/api/conference/get-conference/${conferenceId}`
+      );
+      setConferenceName(res.data.conferenceName || "");
+    };
+    if (conferenceId) fetchConference();
+  }, [conferenceId]);
   const handleInvite = async () => {
     if (!emails.trim()) {
       toast.error("Please provide at least one email.");
@@ -59,7 +59,6 @@ const InviteReviewers = () => {
   };
 
   return (
-    <Layout title="Confizio - Invite Reviewers">
       <div className="p-6 flex justify-center items-center min-h-screen bg-gray-100">
         <div className="w-full max-w-2xl bg-white shadow-md rounded-lg p-8">
           <h1 className="text-3xl font-semibold mb-6 text-gray-800">
@@ -91,7 +90,6 @@ const InviteReviewers = () => {
           </button>
         </div>
       </div>
-    </Layout>
   );
 };
 

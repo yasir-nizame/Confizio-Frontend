@@ -111,9 +111,9 @@ function ConferenceCreationForm() {
       return false;
     }
 
-    if (abstract < start || abstract > end) {
+    if (abstract > end) {
       toast.error(
-        "Abstract registration deadline must lie between start and end date."
+        "Abstract registration deadline must be before conference end date."
       );
       return false;
     }
@@ -387,6 +387,20 @@ function ConferenceCreationForm() {
                   />
                   No Blind
                 </label>
+              </div>
+              <div className="mt-2 text-sm text-gray-600 space-y-1">
+                <p>
+                  <strong>Single-blind:</strong> Reviewer knows author's
+                  identity, author does not know reviewer.
+                </p>
+                <p>
+                  <strong>Double-blind:</strong> Neither author nor reviewer
+                  knows each other’s identity.
+                </p>
+                <p>
+                  <strong>No-blind:</strong> Both author and reviewer know each
+                  other’s identity.
+                </p>
               </div>
             </div>
 

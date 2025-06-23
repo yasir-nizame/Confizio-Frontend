@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Layout from "../../components/Layout";
 
 const ProceedingsPreview = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [error, setError] = useState(null);
+  const [conferenceName, setConferenceName] = useState("");
 
-  const useQuery = () => new URLSearchParams(useLocation().search);
-  const query = useQuery();
-  const conferenceId = query.get("conferenceId");
-  const conferenceName = query.get("conferenceName");
+  const { id: conferenceId } = useParams();
 
   useEffect(() => {
     if (!conferenceId) {
@@ -23,8 +21,10 @@ const ProceedingsPreview = () => {
         const { data } = await axios.get(
           `/api/conference/get-conference/${conferenceId}`
         );
+        console.log(data);
         const url = data.proceedingsPdfUrl || null;
         setPdfUrl(url);
+        setConferenceName(data.conferenceName);
 
         if (url) {
           window.open(url, "_blank");

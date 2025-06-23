@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-};
 const ReviewManagement = () => {
   const [tableData, setTableData] = useState([]);
 
-  const query = useQuery();
-  const conferenceId = query.get("conferenceId");
-  const conferenceName = query.get("conferenceName");
+  const { id: conferenceId } = useParams();
+  const [conferenceName, setConferenceName] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,7 +16,12 @@ const ReviewManagement = () => {
         const response = await axios.get(
           `/api/organizer/review-management/${conferenceId}`
         );
-
+        console.log("response,", response);
+        setConferenceName(
+          Array.isArray(response.data) && response.data.length > 0
+            ? response.data[0].conferenceName || ""
+            : ""
+        );
         setTableData(response.data);
       } catch (error) {
         console.error("Error fetching review management data:", error);
@@ -76,7 +77,6 @@ const ReviewManagement = () => {
     }
   };
   return (
-    <Layout title={"Dashboard - Review Management"}>
       <div className="p-6 bg-gray-100 min-h-screen">
         <h1 className="text-2xl font-bold mb-4">Review Management</h1>
         <h1 className="text-xl font-bold mb-4">Conference: {conferenceName}</h1>
@@ -316,7 +316,6 @@ const ReviewManagement = () => {
           </table>
         </div>
       </div>
-    </Layout>
   );
 };
 

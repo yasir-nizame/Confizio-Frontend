@@ -23,6 +23,7 @@ function AuthorForm({ conferenceName }) {
   const [complianceLoading, setComplianceLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [abstractWordCount, setAbstractWordCount] = useState(0);
 
   const removeFile = () => {
     setSelectedFile(null);
@@ -78,7 +79,11 @@ function AuthorForm({ conferenceName }) {
   }, [auth]);
 
   const addAuthor = () => {
-    setAuthors([
+    if (authors.length >= 3) {
+      toast.error("You can add up to 2 authors only.");
+      return;
+    }
+    const newAuthors = [
       ...authors,
       {
         firstName: "",
@@ -89,7 +94,14 @@ function AuthorForm({ conferenceName }) {
         webPage: "",
         corresponding: false,
       },
-    ]);
+    ];
+    setAuthors(newAuthors);
+    console.log("Updated authors:", newAuthors); // Debugging
+  };
+  const removeAuthor = (index) => {
+    if (index === 0) return; // Prevent removing the first author
+    const updatedAuthors = authors.filter((_, i) => i !== index);
+    setAuthors(updatedAuthors);
   };
 
   const handleInputChange = (index, event) => {
@@ -212,7 +224,7 @@ function AuthorForm({ conferenceName }) {
       setAbstract("");
       setKeywords("");
       setPaper(null);
-      setSelectedFile(null); // Reset selectedFile to hide file name and cross icon
+      setSelectedFile(null);
       setAuthors([
         {
           firstName: "",
@@ -271,8 +283,32 @@ function AuthorForm({ conferenceName }) {
             {authors.map((author, index) => (
               <div
                 key={index}
-                className="mb-6 p-4 border border-gray-300 rounded-lg bg-gray-50"
+                className="relative mb-6 p-4 border border-gray-300 rounded-lg bg-gray-50"
               >
+                {index !== 0 && (
+                  <button
+                    type="button"
+                    onClick={() => removeAuthor(index)}
+                    className="absolute top-3 right-3 text-red-600 hover:text-red-800"
+                    title="Remove this author"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>{" "}
+                  </button>
+                )}
+
                 <h2 className="text-lg font-medium text-gray-700 mb-4">
                   Author {index + 1}
                 </h2>
@@ -371,6 +407,7 @@ function AuthorForm({ conferenceName }) {
               type="button"
               onClick={addAuthor}
               className="w-full py-2 px-4 border border-gray-400 rounded-md text-gray-600 hover:bg-gray-200 mb-6"
+              // disabled={authors.length >= 3}
             >
               Add another author
             </button>
@@ -401,9 +438,32 @@ function AuthorForm({ conferenceName }) {
                   rows="4"
                   className="w-full mt-1 p-2 border border-gray-300 rounded-md"
                   value={abstract}
-                  onChange={(e) => setAbstract(e.target.value)}
+                  onChange={(e) => {
+                    setAbstract(e.target.value);
+                    const words = e.target.value
+                      .trim()
+                      .split(/\s+/)
+                      .filter(Boolean);
+                    setAbstractWordCount(words.length);
+                  }}
                   required
                 />
+                <p
+                  className={`text-sm mt-1 ${
+                    abstractWordCount < 100
+                      ? "text-yellow-600"
+                      : abstractWordCount > 300
+                      ? "text-red-600"
+                      : "text-green-600"
+                  }`}
+                >
+                  {abstractWordCount} words –{" "}
+                  {abstractWordCount < 100
+                    ? `Add ${100 - abstractWordCount} more word(s)`
+                    : abstractWordCount > 300
+                    ? `Remove ${abstractWordCount - 300} word(s)`
+                    : "Looks good!"}
+                </p>
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700">

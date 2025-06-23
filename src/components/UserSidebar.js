@@ -84,7 +84,7 @@ const UserSidebar = () => {
           </svg>
           {isExpanded && <span className="ml-2">Profile</span>}
         </NavLink>
-        <NavLink
+        {/* <NavLink
           to="/userdashboard/create-conference"
           className="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-primaryAlt-dark rounded"
         >
@@ -103,7 +103,7 @@ const UserSidebar = () => {
             />
           </svg>
           {isExpanded && <span className="ml-2">Create Conference</span>}
-        </NavLink>
+        </NavLink> */}
         <NavLink
           to="/userdashboard/roles"
           className="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-primaryAlt-dark rounded"

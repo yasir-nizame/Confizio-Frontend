@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Layout from "../../components/Layout";
 import { useNavigate } from "react-router-dom";
 
 export default function ConferencePapersDecisions() {
   const navigate = useNavigate();
   const [papers, setPapers] = useState([]);
+  const [conferenceName, setConferenceName] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
 
-  const useQuery = () => new URLSearchParams(useLocation().search);
-  const query = useQuery();
-  const conferenceId = query.get("conferenceId");
-  const conferenceName = query.get("conferenceName");
+  const { id: conferenceId } = useParams();
 
   useEffect(() => {
     const fetchPapers = async () => {
       try {
         const res = await axios.get(`/api/conference/${conferenceId}/papers`);
+        console.log(res);
         setPapers(res.data.papers);
+        setConferenceName(res.data.papers[0].conferenceName);
       } catch (err) {
         console.error("Error fetching papers", err);
       } finally {
@@ -117,59 +117,57 @@ export default function ConferencePapersDecisions() {
     return <div className="text-center p-10 text-lg">Loading papers...</div>;
 
   return (
-    <Layout>
-      <div className="p-6">
-        <h1 className="text-2xl font-bold text-center mb-6">
-          {conferenceName} - Submitted Papers
-        </h1>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold text-center mb-6">
+        {conferenceName} - Submitted Papers
+      </h1>
 
-        {/* Slicer */}
-        <div className="flex justify-center mb-6">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 mx-1 rounded ${
-                selectedCategory === category
-                  ? "bg-secondary text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-
-        <div className="overflow-x-auto">
-          {selectedCategory === "ALL"
-            ? // Show all categories with headings
-              categories.slice(1).map(
-                (category) =>
-                  groupedPapers[category] && (
-                    <div key={category}>
-                      <h2 className="text-xl font-semibold mb-4">{category}</h2>
-                      {renderTable(groupedPapers[category])}
-                    </div>
-                  )
-              )
-            : // Show only selected category
-              renderTable(filteredPapers)}
-        </div>
-        <div className="flex justify-center mb-6">
+      {/* Slicer */}
+      <div className="flex justify-center mb-6">
+        {categories.map((category) => (
           <button
-            onClick={() =>
-              navigate(
-                `/generate-proceedings?conferenceId=${encodeURIComponent(
-                  conferenceId
-                )}&conferenceName=${encodeURIComponent(conferenceName)}`
-              )
-            }
-            className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark transition"
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            className={`px-4 py-2 mx-1 rounded ${
+              selectedCategory === category
+                ? "bg-secondary text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
           >
-            Generate Proceedings
+            {category}
           </button>
-        </div>
+        ))}
       </div>
-    </Layout>
+
+      <div className="overflow-x-auto">
+        {selectedCategory === "ALL"
+          ? // Show all categories with headings
+            categories.slice(1).map(
+              (category) =>
+                groupedPapers[category] && (
+                  <div key={category}>
+                    <h2 className="text-xl font-semibold mb-4">{category}</h2>
+                    {renderTable(groupedPapers[category])}
+                  </div>
+                )
+            )
+          : // Show only selected category
+            renderTable(filteredPapers)}
+      </div>
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={() =>
+            navigate(
+              `/generate-proceedings/${conferenceId}/${encodeURIComponent(
+                conferenceName
+              )}`
+            )
+          }
+          className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark transition"
+        >
+          Generate Proceedings
+        </button>
+      </div>
+    </div>
   );
 }

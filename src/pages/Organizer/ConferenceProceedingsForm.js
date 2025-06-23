@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Layout from "../../components/Layout";
 
 const ConferenceProceedingsForm = () => {
   const navigate = useNavigate();
-  const useQuery = () => new URLSearchParams(useLocation().search);
-  const query = useQuery();
-  const conferenceId = query.get("conferenceId");
-  const conferenceName = query.get("conferenceName");
+  const { id: conferenceId } = useParams();
+
   const [formData, setFormData] = useState({
     proceedingsIntro: null,
   });
   const [errors, setErrors] = useState({});
   const [papers, setPapers] = useState([]);
   const [fetchError, setFetchError] = useState(null);
+  const [conferenceName, setConferenceName] = useState("");
 
   // Fetch accepted papers on mount
   useEffect(() => {
@@ -29,7 +28,9 @@ const ConferenceProceedingsForm = () => {
         const { data } = await axios.get(
           `/api/organizer/get-proceedings-data/${conferenceId}`
         );
-        setPapers(data);
+        console.log("dataaa", data);
+        setConferenceName(data.conferenceName || "");
+        setPapers(data.papers || []);
       } catch (err) {
         setFetchError("Failed to load papers. Please try again.");
       }
@@ -75,9 +76,9 @@ const ConferenceProceedingsForm = () => {
 
       toast.success("Proceedings PDF uploaded and finalized!");
       navigate(
-        `/view-proceedings?conferenceId=${encodeURIComponent(
+        `/view-proceedings/${encodeURIComponent(
           conferenceId
-        )}&conferenceName=${encodeURIComponent(conferenceName)}`
+        )}/${encodeURIComponent(conferenceName)}`
       );
     } catch (error) {
       console.error("Error uploading PDF:", error);

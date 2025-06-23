@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Layout from "../../components/Layout";
 import toast from "react-hot-toast";
 
 const AssignPapersPage = () => {
-  const [conferenceId, setConferenceId] = useState("");
   const [conferenceName, setConferenceName] = useState("");
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [papers, setPapers] = useState([]);
-  const location = useLocation();
   const [selectedPaperId, setSelectedPaperId] = useState(null);
   const [availableReviewers, setAvailableReviewers] = useState([]);
   const [selectedReviewer, setSelectedReviewer] = useState("");
@@ -19,15 +17,26 @@ const AssignPapersPage = () => {
   const [assignedReviewers, setAssignedReviewers] = useState([]);
   const [assignmentsByPaper, setAssignmentsByPaper] = useState({});
 
-  // Parse query parameters
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const cName = queryParams.get("conferenceName") || "";
-    const cId = queryParams.get("conferenceId") || "";
+  const { id: conferenceId } = useParams();
 
-    setConferenceName(cName);
-    setConferenceId(cId);
-  }, [location.search]);
+  useEffect(() => {
+    const fetchConference = async () => {
+      try {
+        const response = await axios.get(
+          `/api/conference/get-conference/${conferenceId}`
+        );
+        const conference = response.data;
+        setConferenceName(conference.conferenceName);
+        setPapers(conference.papers || []);
+      } catch (error) {
+        console.error("Error fetching conference data:", error);
+      }
+    };
+
+    if (conferenceId) {
+      fetchConference();
+    }
+  }, [conferenceId]);
 
   const handleAssignPapers = async () => {
     setLoading(true);
@@ -194,7 +203,6 @@ const AssignPapersPage = () => {
   };
 
   return (
-    <Layout title={"Confizio - Asign Papers"}>
       <div className="min-h-screen bg-gray-100 p-8">
         <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
           <h1 className="text-2xl font-bold mb-4 text-gray-800">
@@ -216,7 +224,6 @@ const AssignPapersPage = () => {
               id="conferenceId"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm "
               value={conferenceId}
-              onChange={(e) => setConferenceId(e.target.value)}
               readOnly
             />
           </div>
@@ -432,7 +439,6 @@ const AssignPapersPage = () => {
           )}
         </div>
       </div>
-    </Layout>
   );
 };
 

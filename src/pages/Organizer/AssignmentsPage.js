@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Layout from "../../components/Layout";
 
 const AssignmentsPage = () => {
   const [assignments, setAssignments] = useState([]);
+  const [conferenceName, setConferenceName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Extract query parameters from the URL
-  const useQuery = () => {
-    return new URLSearchParams(useLocation().search);
-  };
-  const query = useQuery();
-  const conferenceId = query.get("conferenceId");
-  const conferenceName = query.get("conferenceName");
+  const { id: conferenceId } = useParams();
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -24,6 +19,8 @@ const AssignmentsPage = () => {
           `/api/organizer/assigned-papers/${conferenceId}`
         );
         const data = response.data.data;
+        console.log("data", data);
+        setConferenceName(data.conferenceName || "");
         setAssignments(Array.isArray(data) ? data : []);
         setError("");
       } catch (err) {
@@ -55,7 +52,6 @@ const AssignmentsPage = () => {
   }, {});
 
   return (
-    <Layout title={"Confizio - Assignments"}>
       <div className="min-h-screen bg-gray-100 p-8">
         <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg">
           <div className="p-6 border-b border-gray-200">
@@ -123,7 +119,6 @@ const AssignmentsPage = () => {
           </div>
         </div>
       </div>
-    </Layout>
   );
 };
 

@@ -46,7 +46,9 @@ import TechnicalWeightageForm from "./pages/Organizer/SetTechnicalConfidence.js"
 import ConferencePapersDecisions from "./pages/Organizer/PapersDecision.js";
 import ProceedingsPreview from "./pages/Organizer/ProceedingsPreview.js";
 import ConferenceProceedingsForm from "./pages/Organizer/ConferenceProceedingsForm.js";
+
 import axios from "axios";
+import ConferenceLayout from "./components/conferenceLayout.js";
 
 axios.defaults.baseURL = process.env.REACT_APP_API;
 
@@ -66,7 +68,6 @@ function App() {
         <Route path="/forgot-password" element={<Forgotpassword />} />
         <Route path="*" element={<Pagenotfound />} />
         <Route path="all-conferences" element={<AllConferences />} />
-
         {/* Admin Dashboard Routes */}
         <Route path="/admindashboard/*" element={<AdminPrivateRoute />}>
           <Route path="admin-dashboard" element={<AdminDashboard />} />
@@ -79,7 +80,6 @@ function App() {
             element={<RejectedConferences />}
           />
         </Route>
-
         {/* User Dashboard Routes */}
         <Route path="/userdashboard/*" element={<UserPrivateRoute />}>
           {/* Default route redirects to the user dashboard */}
@@ -138,19 +138,33 @@ function App() {
 
           <Route path="roles" element={<RolesPage />} />
 
-          <Route
-            path="create-conference"
-            element={<ConferenceCreationForm />}
-          />
           <Route path="user-profile" element={<UserProfile />} />
         </Route>
-
         <Route
           path="conference/:acronym/submit-paper/:id"
           element={<AuthorForm />}
         />
-
-        <Route path="/conference/:id" element={<ConferenceDetailsPage />} />
+        {/* <Route path="/conference/:id" element={<ConferenceDetailsPage />} /> */}
+        <Route path="/conference/:id" element={<ConferenceLayout />}>
+          <Route index element={<ConferenceDetailsPage />} />
+          <Route path="invite-reviewers" element={<InviteReviewers />} />
+          <Route
+            path="accepted-invitations"
+            element={<AcceptedInvitations />}
+          />
+          <Route path="assign-papers" element={<AssignPapersPage />} />
+          <Route path="assignments" element={<AssignmentsPage />} />
+          <Route path="review-management" element={<ReviewManagement />} />
+          <Route
+            path="technical-weightage"
+            element={<TechnicalWeightageForm />}
+          />
+          <Route
+            path="papers/decisions"
+            element={<ConferencePapersDecisions />}
+          />
+          <Route path="papers" element={<AllPapersOfAuthor />} />
+        </Route>
         <Route path="/paper/:id" element={<PaperSubmissionDetails />} />
         <Route
           path="/conference/submissions/:id"
@@ -162,10 +176,11 @@ function App() {
         {/* <Route path="register-reviewer" element={<ReviewerRegistrationForm />} />
         <Route path="login-reviewer" element={<ReviewerLoginForm />} /> */}
         <Route
-          path="/generate-proceedings"
+          path="/generate-proceedings/:id/:cname"
           element={<ConferenceProceedingsForm />}
         />
-        <Route path="view-proceedings" element={<ProceedingsPreview />} />
+        <Route path="view-proceedings/:id/:cname" element={<ProceedingsPreview />} />
+        <Route path="create-conference" element={<ConferenceCreationForm />} />
       </Routes>
     </>
   );

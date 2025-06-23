@@ -15,7 +15,6 @@ const Register = () => {
   const isReviewer = role === "reviewer";
   const [expertiseOptions, setExpertiseOptions] = useState([]); // Store expertise list
 
-
   const {
     register,
     handleSubmit,
@@ -210,7 +209,7 @@ const Register = () => {
               expertiseOptions.length > 0 && (
                 <div>
                   <label className="block text-sm font-medium text-primaryAlt-dark">
-                    Expertise
+                    Areas & field of specialization
                   </label>
                   {expertiseOptions.map((expertise, index) => (
                     <div key={index} className="flex items-center mt-2">
